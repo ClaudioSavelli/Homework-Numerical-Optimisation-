@@ -12,7 +12,7 @@ def main():
     kmax = 35000
     btmax = 50
     fin_diff = True
-    xk, fk, gradfk_norm, k, xseq, btseq = steepest_descent_bcktrck(x0, 'Rosenbrok', alpha0, kmax, tolgrad, c, rho, btmax, fin_diff)
+    xk, fk, gradfk_norm, k, xseq, btseq = steepest_descent_bcktrck(x0, 'Rosenbrock', alpha0, kmax, tolgrad, c, rho, btmax, fin_diff)
     print(k, fk)
     print(xk)
 
