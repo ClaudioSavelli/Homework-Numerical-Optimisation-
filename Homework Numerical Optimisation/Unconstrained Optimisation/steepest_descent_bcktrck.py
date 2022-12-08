@@ -1,7 +1,7 @@
 import numpy as np
 from functions import *
 
-def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float, c1: float, rho: float, btmax: int, fin_diff: bool):
+def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float, c1: float, rho: float, btmax: int, fin_diff: bool, fd_type: str):
     
     ''' Function that performs the steepest descent optimization method for a given function.
     
@@ -14,7 +14,8 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
     c1 = factor of the Armijo condition that must be a scalar in (0,1);
     rho = fixed factor, lesser than 1, used for reducing alpha0;
     btmax = maximum number of steps for updating alpha during the backtracking strategy.
-    fin_diff = choose between using the finite difference method for the evaluation of the gradient or not 
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not
+    fd_type = if fin_diff == True, choose between centered/forward/backword finite differences method
     
     OUTPUTS:
     xk = the last x computed by the function;
@@ -33,15 +34,15 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
     if f == 'Rosenbrock':
         fk = rosenbrock(xk)
         k = 0
-        gradfk_norm = np.linalg.norm(grad_Rosenbrock(xk, fin_diff), 2)
+        gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
 
         while k < kmax and gradfk_norm > tolgrad:
-            pk = -grad_Rosenbrock(xk, fin_diff)
+            pk = -grad_rosenbrock(xk, fin_diff, fd_type)
             bt = 0
             alphak = alpha0
             xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
             fnew = rosenbrock(xnew)
-            gradfk = grad_Rosenbrock(xk, fin_diff)
+            gradfk = grad_rosenbrock(xk, fin_diff, fd_type)
 
             while (bt < btmax) and (fnew > fk + c1*alphak*np.dot(pk.flatten(), gradfk.flatten())):
                 # update alpha
@@ -52,7 +53,7 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
             
             xk = xnew
             fk = fnew
-            gradfk_norm = np.linalg.norm(grad_Rosenbrock(xk, fin_diff), 2)
+            gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
             xseq = np.append(xseq, xk, axis=1)
             if btseq.size == 1:
                 btseq[0,0] = bt
