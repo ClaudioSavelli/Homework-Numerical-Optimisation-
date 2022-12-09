@@ -1,9 +1,12 @@
 import numpy as np
+from math import *
 h = np.sqrt(np.finfo(float).eps)
+
 
 def rosenbrock(x: np.ndarray) -> float:
     #Evaluation of the Rosenbrock function in the point x
     return 100*(x[1, 0]-x[0, 0]**2)**2 + (1-x[0, 0])**2
+
 
 def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     '''
@@ -18,9 +21,9 @@ def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
 
 
     num = x.shape[0]
-    grad = np.zeros((num,1))
-    e = np.identity(num)
+    grad = np.empty((num,1))
     if fin_diff == True:
+        e = np.identity(num)
         if (type == "forward" or type == "backward"): 
             fx = rosenbrock(x)
         for i in range(0, num):
@@ -33,4 +36,68 @@ def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     else:
         grad[0, 0] = 400*x[0, 0]**3 - 400*x[0, 0]*x[1, 0] + 2*x[0, 0] - 2
         grad[1, 0] = 200*(x[1, 0] - x[0, 0]**2)
+    return grad
+
+
+def extnd_powell(x: np.ndarray) -> float:
+    num = x.shape[0]
+    if num % 4 != 0:
+        raise Exception("Array length must be multiple of 4.")
+    
+    def f(x: np.ndarray, k: int) -> float:
+        match k % 4:
+            case 1:
+                k -= 1
+                return x[k, 0] + 10*x[k+1, 0]
+            case 2:
+                k -= 1
+                return sqrt(5)*(x[k+1, 0]-x[k+2, 0])
+            case 3:
+                k -= 1
+                return (x[k-1, 0] - 2*x[k, 0])**2
+            case 0:
+                k -= 1
+                return sqrt(10)*(x[k-3, 0] - x[k, 0])**2
+    
+    z = np.empty((num, 1))
+    for k in range(0, num):
+        z[k, 0] = f(x, k+1)
+    return (0.5 * np.sum(z**2, axis=0))[0]
+
+
+def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+    num = x.shape[0]
+    if num % 4 != 0:
+        raise Exception("Array length must be multiple of 4.")
+    
+    def df(x: np.ndarray, k: int) -> float:
+        match k % 4:
+            case 1:
+                k -= 1
+                return x[k, 0] + 10*x[k+1, 0] + 20*(x[k, 0] - x[k+3, 0])**3
+            case 2:
+                k -= 1
+                return 10*(x[k-1, 0]+10*x[k, 0]) + 2*(x[k, 0]-2*x[k+1, 0])**3
+            case 3:
+                k -= 1
+                return 5*(x[k, 0] - x[k+1, 0]) + 4*(2*x[k, 0] - x[k-1, 0])**3
+            case 0:
+                k -= 1
+                return 5*(x[k, 0] - x[k-1, 0]) + 20*(x[k, 0] - x[k-3, 0])**3
+
+    grad = np.empty((num, 1))
+    if fin_diff == True:
+        e = np.identity(num)
+        if (type == "forward" or type == "backward"): 
+            fx = extnd_powell(x)
+        for i in range(0, num):
+            if(type == "forward"): 
+                grad[i, 0] = (extnd_powell(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+            elif(type == "backward"): 
+                grad[i, 0] = -(extnd_powell(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+            else:
+                grad[i, 0] = (extnd_powell(x+h*e[:, i].reshape(-1, 1)) - extnd_powell(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+    else:
+        for k in range(0, num):
+            grad[k, 0] = df(x, k+1)
     return grad

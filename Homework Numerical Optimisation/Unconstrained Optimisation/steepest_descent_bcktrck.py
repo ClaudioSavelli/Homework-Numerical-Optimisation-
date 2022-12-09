@@ -26,7 +26,7 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
     btseq = k vector whose elements are the number of backtracking '''
     
     xseq = x0.reshape(-1,1)
-    btseq = np.zeros((1,1))
+    btseq = np.empty((1,1))
     xk = x0.reshape(-1,1)
     fk = 0
     k = 0
