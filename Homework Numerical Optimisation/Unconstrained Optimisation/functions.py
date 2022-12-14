@@ -101,3 +101,55 @@ def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
         for k in range(0, num):
             grad[k, 0] = df(x, k+1)
     return grad
+
+def banded_trig(x: np.ndarray) -> float:
+    num = x.shape[0]
+    z = np.empty((num, 1))
+    
+    #first iteration, different from the others 
+    z[0] = (1-cos(x[0]-sin(x[1])))
+    
+    for k in range(1, num-1):
+        z[k] = k*((1-cos(x[k])+sin(x[k-1]-sin(x[k+1]))))
+    
+    #last iteration, different from the others 
+    n = num-1
+    z[n] = (n)*((1-cos(x[n]))+sin(x[n-1]))
+    return (np.sum(z, axis=0))[0]
+
+def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+    '''
+    Compute the appoximation of the gradient via finite differences or, when known, with the true gradient
+    
+    INPUTS:
+    x = n−dimensional column vector;
+    type = "centered" (Centered difference approximation for gradf), "forward" (Forward difference approximation for gradf), "backward" (Backward difference approximation for gradf);
+
+    OUTPUTS:
+    gradfx=the appossimation of the gradient in x via finite differences'''
+
+
+    num = x.shape[0]
+    grad = np.empty((num,1))
+    if fin_diff == True:
+        e = np.identity(num)
+        if (type == "forward" or type == "backward"): 
+            fx = banded_trig(x)
+        for i in range(0, num):
+            if(type == "forward"): 
+                grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+            elif(type == "backward"): 
+                grad[i] = -(banded_trig(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+            else:
+                grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - banded_trig(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+    else:
+        #first iteration, different from the others 
+        grad[0] = (sin(x[0]) + 2*cos(x[0]))
+        
+        for k in range(1, num-1):
+            grad[k] = -(k-1)*cos(x[k]) + k*sin(x[k]) + (k+1)*cos(x[k])
+        
+        #last iteration, different from the others 
+        k = num-1
+        grad[k] = -(k-1)*(cos(x[k])) + k*(sin(x[k]))
+    return grad
