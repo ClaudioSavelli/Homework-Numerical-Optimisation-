@@ -117,9 +117,8 @@ def banded_trig(x: np.ndarray) -> float:
     for k in range(1, num-1):
         z[k] = (k + 1) * (1-cos(x[k]) + sin(x[k-1]) - sin(x[k+1]))
     
-    #last iteration, different from the others 
-    n = num - 1
-    z[n] = num * (1 - cos(x[n]) + sin(x[n-1]))
+    #last iteration, different from the others
+    z[num-1] = num * (1 - cos(x[num-1]) + sin(x[num-2]))
     return (np.sum(z, axis=0))[0]
 
 
@@ -155,12 +154,11 @@ def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
         #first iteration, different from the others 
         grad[0] = (sin(x[0]) + 2*cos(x[0]))
         
-        for k in range(1, num-1):
-            grad[k] = -k*cos(x[k]) + (k+1)*sin(x[k]) + (k+2)*cos(x[k])
+        for k in range(2, num):
+            grad[k-1] = -(k-1)*cos(x[k-1]) + k*sin(x[k-1]) + (k+1)*cos(x[k-1])
         
-        #last iteration, different from the others 
-        k = num - 1
-        grad[k] = -(num-1)*cos(x[k]) + num*sin(x[k])
+        #last iteration, different from the others
+        grad[num-1] = -(num-1)*cos(x[num-1]) + num*sin(x[num-1])
     return grad
 
 

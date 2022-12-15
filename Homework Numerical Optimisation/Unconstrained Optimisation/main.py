@@ -66,4 +66,3 @@ if __name__ == '__main__':
     print(funcs.grad_banded_trig(x0, True, 'fw'))
     print(funcs.grad_banded_trig(x0, True, 'bw'))
     print(funcs.grad_banded_trig(x0, False, 'c'))
-    
