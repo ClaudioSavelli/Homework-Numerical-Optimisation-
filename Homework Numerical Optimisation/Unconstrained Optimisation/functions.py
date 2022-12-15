@@ -103,20 +103,25 @@ def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
             grad[k] = df(x, k+1)
     return grad
 
+
 def banded_trig(x: np.ndarray) -> float:
     num = x.shape[0]
+    if num < 2:
+        raise Exception("Array length must be equal or higher than 2.")
+    
     z = np.empty((num, 1))
     
     #first iteration, different from the others 
-    z[0] = (1-cos(x[0]-sin(x[1])))
+    z[0] = 1 - cos(x[0]) - sin(x[1])
     
     for k in range(1, num-1):
-        z[k] = k*((1-cos(x[k])+sin(x[k-1]-sin(x[k+1]))))
+        z[k] = (k + 1) * (1-cos(x[k]) + sin(x[k-1]) - sin(x[k+1]))
     
     #last iteration, different from the others 
-    n = num-1
-    z[n] = (n)*((1-cos(x[n]))+sin(x[n-1]))
+    n = num - 1
+    z[n] = num * (1 - cos(x[n]) + sin(x[n-1]))
     return (np.sum(z, axis=0))[0]
+
 
 def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     '''
@@ -131,15 +136,18 @@ def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
 
 
     num = x.shape[0]
+    if num < 2:
+        raise Exception("Array length must be equal or higher than 2.")
+    
     grad = np.empty((num,1))
     if fin_diff == True:
         e = np.identity(num)
-        if (type == "forward" or type == "backward"): 
+        if (type == "fw" or type == "bw"): 
             fx = banded_trig(x)
         for i in range(0, num):
-            if(type == "forward"): 
+            if(type == "fw"): 
                 grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - fx) / h
-            elif(type == "backward"): 
+            elif(type == "bw"): 
                 grad[i] = -(banded_trig(x-h*e[:, i].reshape(-1, 1)) - fx) / h
             else:
                 grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - banded_trig(x-h*e[:, i].reshape(-1, 1))) / (2*h)
@@ -148,12 +156,13 @@ def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
         grad[0] = (sin(x[0]) + 2*cos(x[0]))
         
         for k in range(1, num-1):
-            grad[k] = -(k-1)*cos(x[k]) + k*sin(x[k]) + (k+1)*cos(x[k])
+            grad[k] = -k*cos(x[k]) + (k+1)*sin(x[k]) + (k+2)*cos(x[k])
         
         #last iteration, different from the others 
-        k = num-1
-        grad[k] = -(k-1)*(cos(x[k])) + k*(sin(x[k]))
-    return grad 
+        k = num - 1
+        grad[k] = -(num-1)*cos(x[k]) + num*sin(x[k])
+    return grad
+
 
 def extnd_rosenb(x: np.ndarray) -> float:
     num = x.shape[0]

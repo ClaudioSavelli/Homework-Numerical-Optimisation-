@@ -59,8 +59,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    x0 = np.array([1.2, 1.2, 1.2]).reshape(-1,1)
+    # main()
+    x0 = np.array([1.0, 1.0]).reshape(-1,1)
     print(banded_trig(x0))
     print(funcs.grad_banded_trig(x0, True, 'c'))
     print(funcs.grad_banded_trig(x0, True, 'fw'))
