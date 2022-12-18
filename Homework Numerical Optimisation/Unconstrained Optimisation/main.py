@@ -1,5 +1,6 @@
 import numpy as np
 from steepest_descent_bcktrck import *
+from cgm_pol_rib import *
 import functions as funcs
 from sklearn.model_selection import ParameterGrid
 
@@ -60,9 +61,18 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    x0 = np.array([1.0, 1.0]).reshape(-1,1)
-    print(banded_trig(x0))
-    print(funcs.grad_banded_trig(x0, True, 'c'))
-    print(funcs.grad_banded_trig(x0, True, 'fw'))
-    print(funcs.grad_banded_trig(x0, True, 'bw'))
-    print(funcs.grad_banded_trig(x0, False, 'c'))
+    x0 = np.array([1.2, 1.2, 1.2, 1.2]).reshape(-1,1)
+    alpha0 = 5
+    tolgrad = 1e-12
+    rho = 0.5
+    c = 1e-4
+    kmax = 1000
+    btmax = 50
+    fin_diff = True
+    fd_type = 'centered'
+    xk, fk, gradfk_norm, k, xseq, btseq = cgm_pol_rib(x0, 'Extended Rosenbrock', alpha0, kmax, tolgrad, c, rho, btmax, fin_diff, fd_type)
+    print("Analysis of the point x0 = ", x0.reshape(1,-1))
+    print("Number of iterations performed: ", k)
+    print("Evaluation of Rosembrook function in the reached point: ", fk)
+    print("Actual coordinates of the reached point xk: ", xk.reshape(1,-1))
+    print("\n")
