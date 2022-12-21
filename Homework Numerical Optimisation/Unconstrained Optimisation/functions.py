@@ -21,18 +21,18 @@ def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
 
 
     num = x.shape[0]
-    grad = np.empty((num,1))
+    grad = np.empty(num)
     if fin_diff == True:
         e = np.identity(num)
         if (type == "fw" or type == "bw"): 
             fx = rosenbrock(x)
         for i in range(0, num):
             if(type == "fw"): 
-                grad[i] = (rosenbrock(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = (rosenbrock(x+h*e[i, :]) - fx) / h
             elif(type == "bw"): 
-                grad[i] = -(rosenbrock(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = -(rosenbrock(x-h*e[i, :]) - fx) / h
             else:
-                grad[i] = (rosenbrock(x+h*e[:, i].reshape(-1, 1)) - rosenbrock(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+                grad[i] = (rosenbrock(x+h*e[i, :]) - rosenbrock(x-h*e[i, :])) / (2*h)
     else:
         grad[0] = 400*x[0]**3 - 400*x[0]*x[1] + 2*x[0] - 2
         grad[1] = 200*(x[1] - x[0]**2)
@@ -59,10 +59,10 @@ def extnd_powell(x: np.ndarray) -> float:
                 k -= 1
                 return sqrt(10)*(x[k-3] - x[k])**2
     
-    z = np.empty((num, 1))
+    z = np.empty(num)
     for k in range(0, num):
         z[k] = f(x, k+1)
-    return (0.5 * np.sum(z**2, axis=0))[0]
+    return (0.5 * np.sum(z**2))
 
 
 def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
@@ -86,18 +86,18 @@ def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
                 k -= 1
                 return 5*(xk - x[k-1]) + 20*(xk - x[k-3])**3
 
-    grad = np.empty((num, 1))
+    grad = np.empty(num)
     if fin_diff == True:
         e = np.identity(num)
         if (type == "fw" or type == "bw"): 
             fx = extnd_powell(x)
         for i in range(0, num):
             if(type == "fw"): 
-                grad[i] = (extnd_powell(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = (extnd_powell(x+h*e[i, :]) - fx) / h
             elif(type == "bw"): 
-                grad[i] = -(extnd_powell(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = -(extnd_powell(x-h*e[i, :]) - fx) / h
             else:
-                grad[i] = (extnd_powell(x+h*e[:, i].reshape(-1, 1)) - extnd_powell(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+                grad[i] = (extnd_powell(x+h*e[i, :]) - extnd_powell(x-h*e[i, :])) / (2*h)
     else:
         for k in range(0, num):
             grad[k] = df(x, k+1)
@@ -109,7 +109,7 @@ def banded_trig(x: np.ndarray) -> float:
     if num < 2:
         raise Exception("Array length must be equal or higher than 2.")
     
-    z = np.empty((num, 1))
+    z = np.empty(num)
     
     #first iteration, different from the others 
     z[0] = 1 - cos(x[0]) - sin(x[1])
@@ -119,7 +119,7 @@ def banded_trig(x: np.ndarray) -> float:
     
     #last iteration, different from the others
     z[num-1] = num * (1 - cos(x[num-1]) + sin(x[num-2]))
-    return (np.sum(z, axis=0))[0]
+    return (np.sum(z))
 
 
 def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
@@ -138,18 +138,18 @@ def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     if num < 2:
         raise Exception("Array length must be equal or higher than 2.")
     
-    grad = np.empty((num,1))
+    grad = np.empty(num)
     if fin_diff == True:
         e = np.identity(num)
         if (type == "fw" or type == "bw"): 
             fx = banded_trig(x)
         for i in range(0, num):
             if(type == "fw"): 
-                grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = (banded_trig(x+h*e[i, :]) - fx) / h
             elif(type == "bw"): 
-                grad[i] = -(banded_trig(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = -(banded_trig(x-h*e[i, :]) - fx) / h
             else:
-                grad[i] = (banded_trig(x+h*e[:, i].reshape(-1, 1)) - banded_trig(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+                grad[i] = (banded_trig(x+h*e[i, :]) - banded_trig(x-h*e[i, :])) / (2*h)
     else:
         #first iteration, different from the others 
         grad[0] = (sin(x[0]) + 2*cos(x[0]))
@@ -176,10 +176,10 @@ def extnd_rosenb(x: np.ndarray) -> float:
                 k -= 1
                 return x[k-1] - 1
     
-    z = np.empty((num, 1))
+    z = np.empty(num)
     for k in range(0, num):
         z[k] = f(x, k+1)
-    return (0.5 * np.sum(z**2, axis=0))[0]
+    return (0.5 * np.sum(z**2))
 
 
 def grad_extnd_rosenb(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
@@ -197,18 +197,18 @@ def grad_extnd_rosenb(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
                 k -= 1
                 return 100*(xk - x[k-1]**2)
 
-    grad = np.empty((num, 1))
+    grad = np.empty(num)
     if fin_diff == True:
         e = np.identity(num)
         if (type == "fw" or type == "bw"): 
             fx = extnd_rosenb(x)
         for i in range(0, num):
             if(type == "fw"): 
-                grad[i] = (extnd_rosenb(x+h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = (extnd_rosenb(x+h*e[i, :]) - fx) / h
             elif(type == "bw"): 
-                grad[i] = -(extnd_rosenb(x-h*e[:, i].reshape(-1, 1)) - fx) / h
+                grad[i] = -(extnd_rosenb(x-h*e[i, :]) - fx) / h
             else:
-                grad[i] = (extnd_rosenb(x+h*e[:, i].reshape(-1, 1)) - extnd_rosenb(x-h*e[:, i].reshape(-1, 1))) / (2*h)
+                grad[i] = (extnd_rosenb(x+h*e[i, :]) - extnd_rosenb(x-h*e[i, :])) / (2*h)
     else:
         for k in range(0, num):
             grad[k] = df(x, k+1)

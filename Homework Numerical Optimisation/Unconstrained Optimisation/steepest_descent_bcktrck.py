@@ -22,12 +22,14 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
     fk = the value f(xk);
     gradfk_norm = value of the norm of gradf(xk)
     k = index of the last iteration performed
-    xseq = n−by−k matrix where the columns are the xk computed during the iterations
-    btseq = k vector whose elements are the number of backtracking '''
+    x_seq = n−by−k matrix where the columns are the xk computed during the iterations
+    bt_seq = k vector whose elements are the number of backtracking '''
     
-    xseq = x0.reshape(-1,1)
-    btseq = np.empty((1,1))
-    xk = x0.reshape(-1,1)
+    x_seq = x0.reshape(1, -1)
+    bt_seq = np.empty((1, 1))
+    f_seq = np.empty((1, 1))
+    gradf_norm_seq = np.empty((1, 1))
+    xk = x0
     fk = 0
     k = 0
     gradfk_norm = 0
@@ -38,28 +40,32 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
         gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
 
         while k < kmax and gradfk_norm > tolgrad:
-            pk = -grad_rosenbrock(xk, fin_diff, fd_type)
+            gradfk = grad_rosenbrock(xk, fin_diff, fd_type)
+            pk = -gradfk
+            xnew = xk + alphak*pk
+            fnew = rosenbrock(xnew)
             bt = 0
             alphak = alpha0
-            xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
-            fnew = rosenbrock(xnew)
-            gradfk = grad_rosenbrock(xk, fin_diff, fd_type)
 
-            while (bt < btmax) and (fnew > fk + c1*alphak*np.dot(pk.flatten(), gradfk.flatten())):
+            while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pk)):
                 # update alpha
                 alphak = rho*alphak
-                xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
+                xnew = xk + alphak*pk
                 fnew = rosenbrock(xnew)
                 bt = bt + 1
             
             xk = xnew
             fk = fnew
             gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
-            xseq = np.append(xseq, xk, axis=1)
-            if btseq.size == 1:
-                btseq[0,0] = bt
+            x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            if k == 0:
+                bt_seq[0] = bt
+                f_seq[0] = fk
+                gradf_norm_seq[0] = gradfk_norm
             else:
-                btseq = np.append(btseq, np.array([[bt]]), axis=0)
+                bt_seq = np.append(bt_seq, np.array([[bt]]))
+                f_seq = np.append(f_seq, np.array([[fk]]))
+                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
             
     elif f == 'Extended Powell':
@@ -68,28 +74,33 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
         gradfk_norm = np.linalg.norm(grad_extnd_powell(xk, fin_diff, fd_type), 2)
 
         while k < kmax and gradfk_norm > tolgrad:
-            pk = -grad_extnd_powell(xk, fin_diff, fd_type)
+            gradfk = grad_extnd_powell(xk, fin_diff, fd_type)
+            pk = -gradfk
+            xnew = xk + alphak*pk
+            fnew = extnd_powell(xnew)
             bt = 0
             alphak = alpha0
-            xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
-            fnew = extnd_powell(xnew)
-            gradfk = grad_extnd_powell(xk, fin_diff, fd_type)
 
-            while (bt < btmax) and (fnew > fk + c1*alphak*np.dot(pk.flatten(), gradfk.flatten())):
+            while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pk)):
                 # update alpha
                 alphak = rho*alphak
-                xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
+                xnew = xk + alphak*pk
                 fnew = extnd_powell(xnew)
                 bt = bt + 1
             
             xk = xnew
             fk = fnew
             gradfk_norm = np.linalg.norm(grad_extnd_powell(xk, fin_diff, fd_type), 2)
-            xseq = np.append(xseq, xk, axis=1)
-            if btseq.size == 1:
-                btseq[0,0] = bt
+            x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            if k == 0:
+                bt_seq[0] = bt
+                f_seq[0] = fk
+                gradf_norm_seq[0] = gradfk_norm
             else:
-                btseq = np.append(btseq, np.array([[bt]]), axis=0)
+                bt_seq = np.append(bt_seq, np.array([[bt]]))
+                f_seq = np.append(f_seq, np.array([[fk]]))
+                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
+            print(k)
             k = k + 1
             
     elif f == 'Extended Rosenbrock':
@@ -98,28 +109,32 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
         gradfk_norm = np.linalg.norm(grad_extnd_rosenb(xk, fin_diff, fd_type), 2)
 
         while k < kmax and gradfk_norm > tolgrad:
-            pk = -grad_extnd_rosenb(xk, fin_diff, fd_type)
+            gradfk = grad_extnd_rosenb(xk, fin_diff, fd_type)
+            pk = -gradfk
+            xnew = xk + alphak*pk
+            fnew = extnd_rosenb(xnew)
             bt = 0
             alphak = alpha0
-            xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
-            fnew = extnd_rosenb(xnew)
-            gradfk = grad_extnd_rosenb(xk, fin_diff, fd_type)
 
-            while (bt < btmax) and (fnew > fk + c1*alphak*np.dot(pk.flatten(), gradfk.flatten())):
+            while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pk)):
                 # update alpha
                 alphak = rho*alphak
-                xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
+                xnew = xk + alphak*pk
                 fnew = extnd_rosenb(xnew)
                 bt = bt + 1
             
             xk = xnew
             fk = fnew
             gradfk_norm = np.linalg.norm(grad_extnd_rosenb(xk, fin_diff, fd_type), 2)
-            xseq = np.append(xseq, xk, axis=1)
-            if btseq.size == 1:
-                btseq[0,0] = bt
+            x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            if k == 0:
+                bt_seq[0] = bt
+                f_seq[0] = fk
+                gradf_norm_seq[0] = gradfk_norm
             else:
-                btseq = np.append(btseq, np.array([[bt]]), axis=0)
+                bt_seq = np.append(bt_seq, np.array([[bt]]))
+                f_seq = np.append(f_seq, np.array([[fk]]))
+                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
     
     elif 'Banded Trigonometric':
@@ -128,31 +143,35 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
         gradfk_norm = np.linalg.norm(grad_banded_trig(xk, fin_diff, fd_type), 2)
 
         while k < kmax and gradfk_norm > tolgrad:
-            pk = -grad_banded_trig(xk, fin_diff, fd_type)
+            gradfk = grad_banded_trig(xk, fin_diff, fd_type)
+            pk = -gradfk
+            xnew = xk + alphak*pk
+            fnew = banded_trig(xnew)
             bt = 0
             alphak = alpha0
-            xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
-            fnew = banded_trig(xnew)
-            gradfk = grad_banded_trig(xk, fin_diff, fd_type)
 
-            while (bt < btmax) and (fnew > fk + c1*alphak*np.dot(pk.flatten(), gradfk.flatten())):
+            while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pk)):
                 # update alpha
                 alphak = rho*alphak
-                xnew = (xk + alphak*pk.reshape(-1,1)).reshape(-1,1)
+                xnew = xk + alphak*pk
                 fnew = banded_trig(xnew)
                 bt = bt + 1
             
             xk = xnew
             fk = fnew
             gradfk_norm = np.linalg.norm(grad_banded_trig(xk, fin_diff, fd_type), 2)
-            xseq = np.append(xseq, xk, axis=1)
-            if btseq.size == 1:
-                btseq[0,0] = bt
+            x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            if k == 0:
+                bt_seq[0] = bt
+                f_seq[0] = fk
+                gradf_norm_seq[0] = gradfk_norm
             else:
-                btseq = np.append(btseq, np.array([[bt]]), axis=0)
+                bt_seq = np.append(bt_seq, np.array([[bt]]))
+                f_seq = np.append(f_seq, np.array([[fk]]))
+                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
             
     else:
         print(f"No function called {f} exists.")
         
-    return xk, fk, gradfk_norm, k, xseq, btseq
+    return xk, f_seq, gradf_norm_seq, k, x_seq, bt_seq
