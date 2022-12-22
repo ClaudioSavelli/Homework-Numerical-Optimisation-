@@ -32,6 +32,7 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
     xk = x0
     fk = 0
     k = 0
+    alphak = alpha0
     gradfk_norm = 0
     
     if f == 'Rosenbrock':
@@ -100,7 +101,7 @@ def steepest_descent_bcktrck(x0: np.ndarray, f: str, alpha0: float, kmax: int, t
                 bt_seq = np.append(bt_seq, np.array([[bt]]))
                 f_seq = np.append(f_seq, np.array([[fk]]))
                 gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
-            print(k)
+            #print(k)
             k = k + 1
             
     elif f == 'Extended Rosenbrock':
