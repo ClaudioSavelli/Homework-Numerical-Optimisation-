@@ -36,47 +36,49 @@ def cgm_pol_rib(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float
     gradfk_norm = 0
     
     if f == 'Rosenbrock':
-        fk = rosenbrock(xk)
-        pk = -grad_rosenbrock(xk, fin_diff, fd_type)
+        fk = rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]))[0, 0]
+        f_seq[0] = fk
+        pk = -grad_rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]), fin_diff, fd_type)
         k = 0
-        gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
+        gradfk_norm = np.linalg.norm(grad_rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]), fin_diff, fd_type), 2)
+        gradf_norm_seq[0] = gradfk_norm
 
         while k < kmax and gradfk_norm > tolgrad:
             bt = 0
             alphak = alpha0
             xnew = xk + alphak*pk
-            fnew = rosenbrock(xnew)
-            gradfk = grad_rosenbrock(xk, fin_diff, fd_type)
+            fnew = rosenbrock(np.array([[xnew[0]]]), np.array([[xnew[1]]]))[0, 0]
+            gradfk = grad_rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]), fin_diff, fd_type)
 
             while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pk)):
                 # update alpha
                 alphak = rho*alphak
                 xnew = xk + alphak*pk
-                fnew = rosenbrock(xnew)
+                fnew = rosenbrock(np.array([[xnew[0]]]), np.array([[xnew[1]]]))[0, 0]
                 bt = bt + 1
             
             xk = xnew
             fk = fnew
-            gradfnew = grad_rosenbrock(xnew, fin_diff, fd_type)
+            gradfnew = grad_rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]), fin_diff, fd_type)
             betak = (gradfnew @ (gradfnew - gradfk)) / gradfk_norm**2
             pk = -gradfnew + betak*pk
-            gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type), 2)
+            gradfk_norm = np.linalg.norm(grad_rosenbrock(np.array([[xk[0]]]), np.array([[xk[1]]]), fin_diff, fd_type), 2)
             x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            f_seq = np.append(f_seq, np.array([[fk]]))
+            gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             if k == 0:
                 bt_seq[0] = bt
-                f_seq[0] = fk
-                gradf_norm_seq[0] = gradfk_norm
             else:
                 bt_seq = np.append(bt_seq, np.array([[bt]]))
-                f_seq = np.append(f_seq, np.array([[fk]]))
-                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
             
     elif f == 'Extended Powell':
         fk = extnd_powell(xk)
+        f_seq[0] = fk
         pk = -grad_extnd_powell(xk, fin_diff, fd_type)
         k = 0
         gradfk_norm = np.linalg.norm(grad_extnd_powell(xk, fin_diff, fd_type), 2)
+        gradf_norm_seq[0] = gradfk_norm
 
         while k < kmax and gradfk_norm > tolgrad:
             bt = 0
@@ -99,21 +101,21 @@ def cgm_pol_rib(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float
             pk = -gradfnew + betak*pk
             gradfk_norm = np.linalg.norm(grad_extnd_powell(xk, fin_diff, fd_type), 2)
             x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            f_seq = np.append(f_seq, np.array([[fk]]))
+            gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             if k == 0:
                 bt_seq[0] = bt
-                f_seq[0] = fk
-                gradf_norm_seq[0] = gradfk_norm
             else:
                 bt_seq = np.append(bt_seq, np.array([[bt]]))
-                f_seq = np.append(f_seq, np.array([[fk]]))
-                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
             
     elif f == 'Extended Rosenbrock':
         fk = extnd_rosenb(xk)
+        f_seq[0] = fk
         pk = -grad_extnd_rosenb(xk, fin_diff, fd_type)
         k = 0
         gradfk_norm = np.linalg.norm(grad_extnd_rosenb(xk, fin_diff, fd_type), 2)
+        gradf_norm_seq[0] = gradfk_norm
 
         while k < kmax and gradfk_norm > tolgrad:
             bt = 0
@@ -136,21 +138,21 @@ def cgm_pol_rib(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float
             pk = -gradfnew + betak*pk
             gradfk_norm = np.linalg.norm(grad_extnd_rosenb(xk, fin_diff, fd_type), 2)
             x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            f_seq = np.append(f_seq, np.array([[fk]]))
+            gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             if k == 0:
                 bt_seq[0] = bt
-                f_seq[0] = fk
-                gradf_norm_seq[0] = gradfk_norm
             else:
                 bt_seq = np.append(bt_seq, np.array([[bt]]))
-                f_seq = np.append(f_seq, np.array([[fk]]))
-                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
     
     elif 'Banded Trigonometric':
         fk = banded_trig(xk)
+        f_seq[0] = fk
         pk = -grad_banded_trig(xk, fin_diff, fd_type)
         k = 0
         gradfk_norm = np.linalg.norm(grad_banded_trig(xk, fin_diff, fd_type), 2)
+        gradf_norm_seq[0] = gradfk_norm
 
         while k < kmax and gradfk_norm > tolgrad:
             bt = 0
@@ -173,17 +175,15 @@ def cgm_pol_rib(x0: np.ndarray, f: str, alpha0: float, kmax: int, tolgrad: float
             pk = -gradfnew + betak*pk
             gradfk_norm = np.linalg.norm(grad_banded_trig(xk, fin_diff, fd_type), 2)
             x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
+            f_seq = np.append(f_seq, np.array([[fk]]))
+            gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             if k == 0:
                 bt_seq[0] = bt
-                f_seq[0] = fk
-                gradf_norm_seq[0] = gradfk_norm
             else:
                 bt_seq = np.append(bt_seq, np.array([[bt]]))
-                f_seq = np.append(f_seq, np.array([[fk]]))
-                gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
             k = k + 1
             
     else:
         print(f"No function called {f} exists.")
         
-    return xk, f_seq, gradf_norm_seq, k, x_seq, bt_seq
+    return x_seq, f_seq, gradf_norm_seq, k, bt_seq

@@ -1,14 +1,14 @@
 import numpy as np
 from math import *
-h = np.sqrt(np.finfo(float).eps)
+h = np.sqrt(np.finfo(float).eps/2)
 
 
-def rosenbrock(x: np.ndarray) -> float:
+def rosenbrock(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     #Evaluation of the Rosenbrock function in the point x
-    return 100*(x[1]-x[0]**2)**2 + (1-x[0])**2
+    return 100*(y - x**2)**2 + (1 - x)**2
 
 
-def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+def grad_rosenbrock(x: np.ndarray, y: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     '''
     Compute the appoximation of the gradient via finite differences or, when known, with the true gradient
     
@@ -19,23 +19,43 @@ def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     OUTPUTS:
     gradfx=the appossimation of the gradient in x via finite differences'''
 
-
-    num = x.shape[0]
-    grad = np.empty(num)
-    if fin_diff == True:
-        e = np.identity(num)
-        if (type == "fw" or type == "bw"): 
-            fx = rosenbrock(x)
-        for i in range(0, num):
-            if(type == "fw"): 
-                grad[i] = (rosenbrock(x+h*e[i, :]) - fx) / h
-            elif(type == "bw"): 
-                grad[i] = -(rosenbrock(x-h*e[i, :]) - fx) / h
+    x_num = x.shape[1]
+    y_num = y.shape[0]
+    
+    if (x.size == 1 and y.size == 1):
+        grad = np.empty(2)
+        if fin_diff == True:
+            if (type == "fw" or type == "bw"): 
+                fx = rosenbrock(x, y)[0, 0]
+                if(type == "fw"): 
+                    grad[0] = (rosenbrock(x+h, y) - fx)[0, 0] / h
+                    grad[1] = (rosenbrock(x, y+h) - fx)[0, 0] / h
+                else: 
+                    grad[0] = -(rosenbrock(x-h, y) - fx)[0, 0] / h
+                    grad[1] = -(rosenbrock(x, y-h) - fx)[0, 0] / h
             else:
-                grad[i] = (rosenbrock(x+h*e[i, :]) - rosenbrock(x-h*e[i, :])) / (2*h)
+                grad[0] = (rosenbrock(x+h, y) - rosenbrock(x-h, y))[0, 0] / (2*h)
+                grad[1] = (rosenbrock(x, y+h) - rosenbrock(x, y-h))[0, 0] / (2*h)
+        else:
+            grad[0] = (400*x**3 - 400*x*y + 2*x - 2)[0, 0]
+            grad[1] = (200*(y - x**2))[0, 0]
     else:
-        grad[0] = 400*x[0]**3 - 400*x[0]*x[1] + 2*x[0] - 2
-        grad[1] = 200*(x[1] - x[0]**2)
+        grad = np.empty((2, y_num, x_num))
+        if fin_diff == True:
+            if (type == "fw" or type == "bw"): 
+                fx = rosenbrock(x, y)
+                if(type == "fw"): 
+                    grad[0, :, :] = (rosenbrock(x+h, y) - fx) / h
+                    grad[1, :, :] = (rosenbrock(x, y+h) - fx) / h
+                else: 
+                    grad[0, :, :] = -(rosenbrock(x-h, y) - fx) / h
+                    grad[1, :, :] = -(rosenbrock(x, y-h) - fx) / h
+            else:
+                grad[0, :, :] = (rosenbrock(x+h, y) - rosenbrock(x-h, y)) / (2*h)
+                grad[1, :, :] = (rosenbrock(x, y+h) - rosenbrock(x, y-h)) / (2*h)
+        else:
+            grad[0, :, :] = 400*x**3 - 400*x*y + 2*x - 2
+            grad[1, :, :] = 200*(y - x**2)
     return grad
 
 
