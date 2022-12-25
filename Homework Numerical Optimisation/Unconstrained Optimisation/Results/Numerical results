@@ -1,0 +1,83 @@
+1) Extended Powell 
+
+STEEPEST DESCENT 
+mean_of_k:  5000.0
+
+
+min_of_grad_norm:  0.011314446657241253
+mean_of_grad_norm:  0.015173309850936931
+max_of_grad_norm:  0.022180116264650315
+
+
+min_of_fx:  0.005939588885572014
+mean_of_fx:  0.006007518319347166
+max_of_fx:  0.00605497879198791
+
+CONJUGATE METHOD 
+mean_of_k:  4888.7
+
+
+min_of_grad_norm:  9.64770409881263e-13
+mean_of_grad_norm:  3.4036168661708586e-08
+max_of_grad_norm:  2.123968474566715e-07
+
+
+min_of_fx:  9.522565612597491e-18
+mean_of_fx:  3.775404270931218e-14
+max_of_fx:  2.496924078509818e-13
+
+2) Extended Rosenbrock 
+
+STEEPEST DESCENT 
+mean_of_k:  5000.0
+
+
+min_of_grad_norm:  33.55722420022059
+mean_of_grad_norm:  47.50912801951978
+max_of_grad_norm:  66.1652979565404
+
+
+min_of_fx:  3204.5806992971775
+mean_of_fx:  3805.470229207858
+max_of_fx:  4689.500499044189
+
+CONJUGATE METHOD 
+mean_of_k:  5000.0
+
+
+min_of_grad_norm:  1.9045891357765865e-12
+mean_of_grad_norm:  9.21666094858238e-09
+max_of_grad_norm:  9.040049603455672e-08
+
+
+min_of_fx:  1.8742656564413234e-25
+mean_of_fx:  9.137386651613436e-17
+max_of_fx:  9.13710045174861e-16
+
+3) Banded Trigonometric 
+
+STEEPEST DESCENT 
+mean_of_k:  5000.0
+
+
+min_of_grad_norm:  0.5666085576626245
+mean_of_grad_norm:  1.6250297170391028
+max_of_grad_norm:  3.5193510223512705
+
+
+min_of_fx:  -4159.9204812468615
+mean_of_fx:  -4159.006685527123
+max_of_fx:  -1
+
+CONJUGATE METHOD 
+mean_of_k:  5000.0
+
+min_of_grad_norm:  7.858365941975501e-05
+mean_of_grad_norm:  0.00043952233670836065
+max_of_grad_norm:  0.0008632744924607799
+
+
+min_of_fx:  -4159.932447906154
+mean_of_fx:  -4159.932447902696
+max_of_fx:  -1
+
