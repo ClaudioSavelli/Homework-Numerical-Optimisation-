@@ -10,14 +10,16 @@ def rosenbrock(x: np.ndarray, y: np.ndarray) -> np.ndarray:
 
 def grad_rosenbrock(x: np.ndarray, y: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
     '''
-    Compute the appoximation of the gradient via finite differences or, when known, with the true gradient
+    Compute the appoximation of the gradient via finite differences or with the true gradient
     
     INPUTS:
-    x = n−dimensional column vector;
-    type = "centered" (Centered difference approximation for gradf), "forward" (Forward difference approximation for gradf), "backward" (Backward difference approximation for gradf);
+    x = ;
+    y = ;
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method
 
     OUTPUTS:
-    gradfx=the appossimation of the gradient in x via finite differences'''
+    gradfx=the appossimation of the gradient in x'''
 
     x_num = x.shape[1]
     y_num = y.shape[0]
@@ -60,6 +62,7 @@ def grad_rosenbrock(x: np.ndarray, y: np.ndarray, fin_diff: bool, type: str) -> 
 
 
 def extnd_powell(x: np.ndarray) -> float:
+    #Evaluation of the Extended Powell function in the point x
     num = x.shape[0]
     if num % 4 != 0:
         raise Exception("Array length must be multiple of 4.")
@@ -125,6 +128,7 @@ def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
 
 
 def banded_trig(x: np.ndarray) -> float:
+    #Evaluation of the Banded trigonometric problem in the point x
     num = x.shape[0]
     if num < 2:
         raise Exception("Array length must be equal or higher than 2.")
@@ -143,17 +147,6 @@ def banded_trig(x: np.ndarray) -> float:
 
 
 def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
-    '''
-    Compute the appoximation of the gradient via finite differences or, when known, with the true gradient
-    
-    INPUTS:
-    x = n−dimensional column vector;
-    type = "centered" (Centered difference approximation for gradf), "forward" (Forward difference approximation for gradf), "backward" (Backward difference approximation for gradf);
-
-    OUTPUTS:
-    gradfx=the appossimation of the gradient in x via finite differences'''
-
-
     num = x.shape[0]
     if num < 2:
         raise Exception("Array length must be equal or higher than 2.")
@@ -183,6 +176,7 @@ def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
 
 
 def extnd_rosenb(x: np.ndarray) -> float:
+    #Evaluation of the Extended Rosenbrock function in the point x
     num = x.shape[0]
     if num % 2 != 0:
         raise Exception("Array length must be multiple of 2.")
