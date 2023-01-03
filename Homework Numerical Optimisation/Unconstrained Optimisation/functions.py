@@ -4,7 +4,7 @@ h = np.sqrt(np.finfo(float).eps/2)
 
 
 def rosenbrock(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    #Evaluation of the Rosenbrock function in the point x
+    #Evaluation of the Rosenbrock function in the point(s) (x, y)
     return 100*(y - x**2)**2 + (1 - x)**2
 
 
@@ -13,35 +13,36 @@ def grad_rosenbrock(x: np.ndarray, y: np.ndarray, fin_diff: bool, type: str) -> 
     Compute the appoximation of the gradient via finite differences or with the true gradient
     
     INPUTS:
-    x = ;
-    y = ;
-    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not
-    type = if fin_diff == True, choose between centered/forward/backword finite differences method
+    x = array of x-coordinates, in a normal situation it is a single point, we have also implemented an array of points to create the meshgrid for printing the 3D graph;
+    y = array of y-coordinates, in a normal situation it is a single point, we have also implemented an array of points to create the meshgrid for printing the 3D graph;
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not;
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method;
 
     OUTPUTS:
-    gradfx=the appossimation of the gradient in x'''
+    gradfx=the appossimation of the gradient in x;
+    '''
 
     x_num = x.shape[1]
     y_num = y.shape[0]
     
-    if (x.size == 1 and y.size == 1):
+    if (x.size == 1 and y.size == 1): #There is only one point that was passed to the method 
         grad = np.empty(2)
-        if fin_diff == True:
+        if fin_diff == True: #Use the finite differences method for the evaluation of the gradient 
             if (type == "fw" or type == "bw"): 
                 fx = rosenbrock(x, y)[0, 0]
-                if(type == "fw"): 
+                if(type == "fw"): #Use the forward finite difference method 
                     grad[0] = (rosenbrock(x+h, y) - fx)[0, 0] / h
                     grad[1] = (rosenbrock(x, y+h) - fx)[0, 0] / h
-                else: 
+                else: #Use the backward finite difference method 
                     grad[0] = -(rosenbrock(x-h, y) - fx)[0, 0] / h
                     grad[1] = -(rosenbrock(x, y-h) - fx)[0, 0] / h
-            else:
+            else: #Use the centered finite difference method 
                 grad[0] = (rosenbrock(x+h, y) - rosenbrock(x-h, y))[0, 0] / (2*h)
                 grad[1] = (rosenbrock(x, y+h) - rosenbrock(x, y-h))[0, 0] / (2*h)
-        else:
+        else: #Use the real gradient for evaluate the gradient in the point x
             grad[0] = (400*x**3 - 400*x*y + 2*x - 2)[0, 0]
             grad[1] = (200*(y - x**2))[0, 0]
-    else:
+    else: #Do the same, but there are more than one point passed to the method
         grad = np.empty((2, y_num, x_num))
         if fin_diff == True:
             if (type == "fw" or type == "bw"): 
@@ -60,7 +61,7 @@ def grad_rosenbrock(x: np.ndarray, y: np.ndarray, fin_diff: bool, type: str) -> 
             grad[1, :, :] = 200*(y - x**2)
     return grad
 
-
+#The exact same principles were followed for the other three functions
 def extnd_powell(x: np.ndarray) -> float:
     #Evaluation of the Extended Powell function in the point x
     num = x.shape[0]
@@ -89,6 +90,17 @@ def extnd_powell(x: np.ndarray) -> float:
 
 
 def grad_extnd_powell(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+    '''
+    Compute the appoximation of the gradient via finite differences or with the true gradient
+    
+    INPUTS:
+    x: point in which I want to evaluate the gradient of the function; 
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not;
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method;
+
+    OUTPUTS:
+    gradfx=the appossimation of the gradient in x;
+    '''
     num = x.shape[0]
     if num % 4 != 0:
         raise Exception("Array length must be multiple of 4.")
@@ -147,6 +159,17 @@ def banded_trig(x: np.ndarray) -> float:
 
 
 def grad_banded_trig(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+    '''
+    Compute the appoximation of the gradient via finite differences or with the true gradient
+    
+    INPUTS:
+    x: point in which I want to evaluate the gradient of the function; 
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not;
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method;
+
+    OUTPUTS:
+    gradfx=the appossimation of the gradient in x;
+    '''
     num = x.shape[0]
     if num < 2:
         raise Exception("Array length must be equal or higher than 2.")
@@ -197,6 +220,17 @@ def extnd_rosenb(x: np.ndarray) -> float:
 
 
 def grad_extnd_rosenb(x: np.ndarray, fin_diff: bool, type: str) -> np.ndarray:
+    '''
+    Compute the appoximation of the gradient via finite differences or with the true gradient
+    
+    INPUTS:
+    x: point in which I want to evaluate the gradient of the function; 
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not;
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method;
+
+    OUTPUTS:
+    gradfx=the appossimation of the gradient in x;
+    '''
     num = x.shape[0]
     if num % 2 != 0:
         raise Exception("Array length must be multiple of 2.")
