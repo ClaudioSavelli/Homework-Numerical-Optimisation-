@@ -1,7 +1,9 @@
 import numpy as np
+from numba import jit
 from math import *
 
 
+#@jit()
 def rosenbrock(x: np.ndarray) -> float:
     #Evaluation of the Rosenbrock function in the point x
     n = x.shape[0] - 1
@@ -13,6 +15,7 @@ def rosenbrock(x: np.ndarray) -> float:
     return np.sum(z)
 
 
+# @jit()
 def grad_rosenbrock(x: np.ndarray, fin_diff: bool, type: str, k: int) -> np.ndarray:
     '''
     Compute the appoximation of the gradient via finite differences or, when known, with the true gradient

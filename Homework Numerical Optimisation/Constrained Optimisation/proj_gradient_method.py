@@ -1,17 +1,22 @@
 import numpy as np
+from numba import jit
 from function import *
 
+
+#@jit()
 def project(x: np.ndarray, X: dict) -> np.ndarray:
-    for v in X.values():
-        low = v[0][0]
-        upp = v[0][1]
-        start = v[1][0]
-        stop = v[1][1]
-        x[start:stop] = np.where(x[start:stop] > upp, upp, x[start:stop])
-        x[start:stop] = np.where(x[start:stop] < low, low, x[start:stop])
+    for k, v in X.items():
+        if k != 'name':
+            low = v[0][0]
+            upp = v[0][1]
+            start = v[1][0]
+            stop = v[1][1]
+            x[start:stop] = np.where(x[start:stop] > upp, upp, x[start:stop])
+            x[start:stop] = np.where(x[start:stop] < low, low, x[start:stop])
     return x
 
 
+#@jit()
 def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: int, tolgrad: float, tolx: float, c1: float, rho: float, btmax: int, fin_diff: bool, fd_type: str, kgrad: int):
     
     ''' Function that performs the steepest descent optimization method for a given function.
