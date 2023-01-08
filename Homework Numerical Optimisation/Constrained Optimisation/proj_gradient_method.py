@@ -1,23 +1,23 @@
 import numpy as np
 from numba import jit
+from numba.typed import Dict
 from function import *
 
 
-#@jit()
-def project(x: np.ndarray, X: dict) -> np.ndarray:
-    for k, v in X.items():
-        if k != 'name':
-            low = v[0][0]
-            upp = v[0][1]
-            start = v[1][0]
-            stop = v[1][1]
-            x[start:stop] = np.where(x[start:stop] > upp, upp, x[start:stop])
-            x[start:stop] = np.where(x[start:stop] < low, low, x[start:stop])
+@jit(nopython=True)
+def project(x, X):
+    for v in X.values():
+        low = v[0]
+        upp = v[1]
+        start = int(v[2])
+        stop = int(v[3])
+        x[start:stop] = np.where(x[start:stop] > upp, upp, x[start:stop])
+        x[start:stop] = np.where(x[start:stop] < low, low, x[start:stop])
     return x
 
 
-#@jit()
-def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: int, tolgrad: float, tolx: float, c1: float, rho: float, btmax: int, fin_diff: bool, fd_type: str, kgrad: int):
+# @jit(nopython=True)
+def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btmax, fin_diff, fd_type, h):
     
     ''' Function that performs the steepest descent optimization method for a given function.
     
@@ -41,7 +41,8 @@ def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: in
     x_seq = n−by−k matrix where the columns are the xk computed during the iterations
     bt_seq = k vector whose elements are the number of backtracking '''
     
-    x_seq = x0.reshape(1, -1)
+    x_seq = np.empty((1, x0.shape[0]))
+    x_seq[0] = x0.reshape(1, -1)
     bt_seq = np.empty((1, 1))
     f_seq = np.empty((1, 1))
     gradf_norm_seq = np.empty((1, 1))
@@ -49,19 +50,19 @@ def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: in
     xk = x0
     fk = 0
     k = 0
-    gradfk_norm = 0
-    deltaxk_norm = 1
-    alpha0 = 1
+    gradfk_norm = 0.0
+    deltaxk_norm = 1.0
+    alpha0 = 1.0
     alphak = alpha0
     
     fk = rosenbrock(xk)
     f_seq[0] = fk
-    gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type, kgrad), 2)
+    gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type, h), 2)
     gradf_norm_seq[0] = gradfk_norm
     deltax_norm_seq[0] = deltaxk_norm
     
     while k < kmax and gradfk_norm > tolgrad and deltaxk_norm > tolx:
-        gradfk = grad_rosenbrock(xk, fin_diff, fd_type, kgrad)
+        gradfk = grad_rosenbrock(xk, fin_diff, fd_type, h)
         pk = -gradfk
         xhat = project(xk + gamma*pk, box)
         pik = xhat - xk
@@ -69,7 +70,7 @@ def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: in
         fnew = rosenbrock(xnew)
         
         bt = 0
-        while (bt < btmax) and (fnew > fk + c1*alphak*(gradfk @ pik)):
+        while bt < btmax and fnew > fk + c1*alphak*(gradfk @ pik):
             # update alpha
             alphak = rho*alphak
             xnew = xk + alphak*pik
@@ -81,7 +82,7 @@ def projected_gradient_bcktrck(x0: np.ndarray, box: dict, gamma: float, kmax: in
         deltax_norm_seq = np.append(deltax_norm_seq, np.array([[deltaxk_norm]]))
         xk = xnew
         fk = fnew
-        gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type, kgrad), 2)
+        gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type, h), 2)
         x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
         f_seq = np.append(f_seq, np.array([[fk]]))
         gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
