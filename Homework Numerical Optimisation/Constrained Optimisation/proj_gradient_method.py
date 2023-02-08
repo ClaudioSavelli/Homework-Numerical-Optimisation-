@@ -86,7 +86,7 @@ def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btm
         f_seq[k+1] = fk
         gradf_norm_seq[k+1] = gradfk_norm
         bt_seq[k] = bt
-        print(k)
+        # print(k)
         k = k + 1
         
     return x_seq, f_seq, gradf_norm_seq, deltax_norm_seq, k, bt_seq
