@@ -16,7 +16,7 @@ def project(x, X):
     return x
 
 
-#@jit(nopython=True)
+@jit(nopython=True)
 def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btmax, fin_diff, fd_type, h):
     
     ''' Function that performs the steepest descent optimization method for a given function.
@@ -41,19 +41,18 @@ def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btm
     x_seq = n−by−k matrix where the columns are the xk computed during the iterations
     bt_seq = k vector whose elements are the number of backtracking '''
     
-    x_seq = np.empty((1, x0.shape[0]))
-    x_seq[0] = x0.reshape(1, -1)
-    bt_seq = np.empty((1, 1))
-    f_seq = np.empty((1, 1))
-    gradf_norm_seq = np.empty((1, 1))
-    deltax_norm_seq = np.empty((1, 1))
+    x_seq = np.empty((kmax+1, x0.shape[0]))
+    x_seq[0, :] = x0
+    bt_seq = np.empty((kmax+1,))
+    f_seq = np.empty((kmax+1,))
+    gradf_norm_seq = np.empty((kmax+1,))
+    deltax_norm_seq = np.empty((kmax+1,))
     xk = x0
     fk = 0
     k = 0
     gradfk_norm = 0.0
-    deltaxk_norm = 1.0
-    alpha0 = 1.0
-    alphak = alpha0
+    deltaxk_norm = np.linalg.norm(x0, 2)
+    alphak = gamma
     
     fk = rosenbrock(xk)
     f_seq[0] = fk
@@ -76,21 +75,18 @@ def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btm
             xnew = xk + alphak*pik
             fnew = rosenbrock(xnew)
             bt = bt + 1
-        alphak = alpha0
+        alphak = gamma
         
         deltaxk_norm = np.linalg.norm(xnew - xk, 2)
-        deltax_norm_seq = np.append(deltax_norm_seq, np.array([[deltaxk_norm]]))
+        deltax_norm_seq[k+1] = deltaxk_norm
         xk = xnew
         fk = fnew
         gradfk_norm = np.linalg.norm(grad_rosenbrock(xk, fin_diff, fd_type, h), 2)
-        x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
-        f_seq = np.append(f_seq, np.array([[fk]]))
-        gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
+        x_seq[k+1, :] = xk
+        f_seq[k+1] = fk
+        gradf_norm_seq[k+1] = gradfk_norm
+        bt_seq[k] = bt
         print(k)
-        if k == 0:
-            bt_seq[0] = bt
-        else:
-            bt_seq = np.append(bt_seq, np.array([[bt]]))
         k = k + 1
         
     return x_seq, f_seq, gradf_norm_seq, deltax_norm_seq, k, bt_seq
