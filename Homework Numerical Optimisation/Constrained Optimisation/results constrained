@@ -1,0 +1,130 @@
+Exact derivative method: 
+1) d = 3, fin_diff = False, X = X1 k = 2500, fk = 1.2323223993867778, gradfk_norm = 6.167356319905309, deltaxk_norm = 0.0011209457123699067
+
+2) d = 3, fin_diff = False, X = X2 k = 2500, fk = 5.247132221158945, gradfk_norm = 6.975834742776066, deltaxk_norm = 0.0011464454783688867
+
+3) d = 3, fin_diff = False, X = X3 k = 2500, fk = 527.5634134467701, gradfk_norm = 15.13991042440774, deltaxk_norm = 0.015828005679770798
+
+4) d = 4, fin_diff = False, X = X1 k = 2500, fk = 12.567267477520394, gradfk_norm = 77.18817005928177, deltaxk_norm = 0.020246714783899333
+
+5) d = 4, fin_diff = False, X = X2 k = 2500, fk = 15.250614433519466, gradfk_norm = 73.01913449694435, deltaxk_norm = 0.008921293450300776
+
+6) d = 4, fin_diff = False, X = X3 k = 2500, fk = 4984.124715705466, gradfk_norm = 9.0439743154051, deltaxk_norm = 0.007866855663048077
+
+7) d = 5, fin_diff = False, X = X1 k = 2500, fk = 2464.845454960328, gradfk_norm = 1059.498047866199, deltaxk_norm = 0.3178049354295652
+
+8) d = 5, fin_diff = False, X = X2 k = 2500, fk = 2492.5172328230638, gradfk_norm = 1065.8093799804642, deltaxk_norm = 0.32851282744135535
+
+9) d = 5, fin_diff = False, X = X3 k = 2500, fk = 49532.85590418838, gradfk_norm = 13.785996448417762, deltaxk_norm = 0.009048163825475419
+
+Finite difference derivative method: 
+1) d = 3, fin_diff = True, type = fw, k = 2, X = X1
+k = 34, fk = 0.0, gradfk_norm = 28525.539590974324, deltaxk_norm = 0.0
+
+2) d = 3, fin_diff = True, type = fw, k = 2, X = X2
+k = 2500, fk = 21.513598999623756, gradfk_norm = 28518.42727029309, deltaxk_norm = 7.071460060921094e-08
+
+3) d = 3, fin_diff = True, type = fw, k = 2, X = X3
+k = 2500, fk = 5438.79016743088, gradfk_norm = 23097.769412310576, deltaxk_norm = 2.014950787985318e-06
+
+4) d = 3, fin_diff = True, type = fw, k = 4, X = X1
+k = 516, fk = 0.0, gradfk_norm = 149.67192018170175, deltaxk_norm = 0.0
+
+5) d = 3, fin_diff = True, type = fw, k = 4, X = X2
+k = 2500, fk = 0.7048510957662084, gradfk_norm = 160.4915395845888, deltaxk_norm = 2.474106694782738e-08
+
+6) d = 3, fin_diff = True, type = fw, k = 4, X = X3
+k = 1377, fk = 554.7827767450482, gradfk_norm = 109.9562559578381, deltaxk_norm = 3.0264451325057543e-09
+
+7) d = 3, fin_diff = True, type = fw, k = 6, X = X1
+k = 2500, fk = 1.0957717680199979, gradfk_norm = 5.608787977746696, deltaxk_norm = 0.0010441837582503067
+
+8) d = 3, fin_diff = True, type = fw, k = 6, X = X2
+k = 2500, fk = 1.1830274558791416, gradfk_norm = 6.804845764241191, deltaxk_norm = 0.0011287351667922682
+
+9) d = 3, fin_diff = True, type = fw, k = 6, X = X3
+k = 2500, fk = 527.7372197644975, gradfk_norm = 11.690481174264239, deltaxk_norm = 0.00920950380100464
+
+10) d = 3, fin_diff = True, type = fw, k = 8, X = X1
+k = 2500, fk = 1.1636628256014978, gradfk_norm = 5.394907972116398, deltaxk_norm = 0.0010885442631656083
+
+11) d = 3, fin_diff = True, type = fw, k = 8, X = X2
+k = 2500, fk = 1.3240811121650649, gradfk_norm = 7.115396883907315, deltaxk_norm = 0.0011714276803990121
+
+12) d = 3, fin_diff = True, type = fw, k = 8, X = X3
+k = 2500, fk = 527.9548773372485, gradfk_norm = 14.747974433810912, deltaxk_norm = 0.01595006791052764
+
+13) d = 3, fin_diff = True, type = fw, k = 10, X = X1
+k = 2500, fk = 1.1304521772716116, gradfk_norm = 4.750105031725905, deltaxk_norm = 0.001075699638437856
+
+14) d = 3, fin_diff = True, type = fw, k = 10, X = X2
+k = 2500, fk = 5.250741624571233, gradfk_norm = 6.931335515000598, deltaxk_norm = 0.0011488649339676125
+
+15) d = 3, fin_diff = True, type = fw, k = 10, X = X3
+k = 2500, fk = 527.3460953374043, gradfk_norm = 10.040734239677219, deltaxk_norm = 0.007958071833412583
+
+16) d = 3, fin_diff = True, type = fw, k = 12, X = X1
+k = 2500, fk = 1.2647478967529633, gradfk_norm = 5.856066057477088, deltaxk_norm = 0.0011452864781474345
+
+17) d = 3, fin_diff = True, type = fw, k = 12, X = X2
+k = 2500, fk = 5.249046006389981, gradfk_norm = 6.757522779129207, deltaxk_norm = 0.0011510045986104448
+
+18) d = 3, fin_diff = True, type = fw, k = 12, X = X3
+k = 2500, fk = 527.4143032055298, gradfk_norm = 10.186815698592923, deltaxk_norm = 0.010294646931187385
+
+19) d = 4, fin_diff = True, type = fw, k = 2, X = X1
+k = 4, fk = 0.0, gradfk_norm = 741538.6794731924, deltaxk_norm = 0.0
+
+20) d = 4, fin_diff = True, type = fw, k = 2, X = X2
+k = 2500, fk = 15.105125349897357, gradfk_norm = 741503.8412901865, deltaxk_norm = 7.138942259565795e-08
+
+21) d = 4, fin_diff = True, type = fw, k = 2, X = X3
+k = 2500, fk = 1537018.3962359375, gradfk_norm = 708952.9334809907, deltaxk_norm = 6.730352606213728e-06
+
+22) d = 4, fin_diff = True, type = fw, k = 4, X = X1
+k = 1055, fk = 0.0, gradfk_norm = 1495.9091574638917, deltaxk_norm = 0.0
+
+23) d = 4, fin_diff = True, type = fw, k = 4, X = X2
+k = 2500, fk = 2.411855040767321, gradfk_norm = 1508.678582307604, deltaxk_norm = 5.793713656246388e-08
+
+24) d = 4, fin_diff = True, type = fw, k = 4, X = X3
+k = 2500, fk = 5125.754141951335, gradfk_norm = 1097.6899149086707, deltaxk_norm = 8.40209365983124e-08
+
+25) d = 4, fin_diff = True, type = fw, k = 6, X = X1
+k = 2500, fk = 4.441641996119131, gradfk_norm = 53.38170781583976, deltaxk_norm = 0.009802671312485538
+
+26) d = 4, fin_diff = True, type = fw, k = 6, X = X2
+k = 2500, fk = 3.102213928338944, gradfk_norm = 42.19739931915132, deltaxk_norm = 0.004308731428407769
+
+27) d = 4, fin_diff = True, type = fw, k = 6, X = X3
+k = 2500, fk = 4983.10153998026, gradfk_norm = 21.888103504556017, deltaxk_norm = 0.013415222540878017
+
+28) d = 4, fin_diff = True, type = fw, k = 8, X = X1
+k = 2500, fk = 2.415274269509432, gradfk_norm = 23.78740691529556, deltaxk_norm = 0.0029645299719264708
+
+29) d = 4, fin_diff = True, type = fw, k = 8, X = X2
+k = 2500, fk = 6.1624106853537395, gradfk_norm = 20.6860740831429, deltaxk_norm = 0.0028814775914358663
+
+30) d = 4, fin_diff = True, type = fw, k = 8, X = X3
+k = 2500, fk = 4983.832060735148, gradfk_norm = 10.961296221483904, deltaxk_norm = 0.00772090898281486
+
+31) d = 4, fin_diff = True, type = fw, k = 10, X = X1
+k = 2500, fk = 12.891551503338885, gradfk_norm = 79.63053843256019, deltaxk_norm = 0.016323184751962733
+
+32) d = 4, fin_diff = True, type = fw, k = 10, X = X2
+k = 2500, fk = 7.665529779150894, gradfk_norm = 58.81572284136994, deltaxk_norm = 0.014087201635608176
+
+33) d = 4, fin_diff = True, type = fw, k = 10, X = X3
+k = 2500, fk = 4984.480378506935, gradfk_norm = 10.03577696951411, deltaxk_norm = 0.007493482656728954
+
+34) d = 4, fin_diff = True, type = fw, k = 12, X = X1
+k = 2500, fk = 17.930464484162016, gradfk_norm = 94.0931770915224, deltaxk_norm = 0.01620753644984135
+
+35) d = 4, fin_diff = True, type = fw, k = 12, X = X2
+k = 2500, fk = 8.636845952934081, gradfk_norm = 62.10651142139543, deltaxk_norm = 0.01735087139034085
+
+36) d = 4, fin_diff = True, type = fw, k = 12, X = X3
+k = 2500, fk = 4984.334074580872, gradfk_norm = 8.55019490868924, deltaxk_norm = 0.006813577221606224
+
+37) d = 5, fin_diff = True, type = fw, k = 2, X = X1
+k = 3, fk = 0.0, gradfk_norm = 37201531.048781335, deltaxk_norm = 0.0

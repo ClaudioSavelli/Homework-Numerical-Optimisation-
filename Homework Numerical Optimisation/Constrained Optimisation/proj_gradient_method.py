@@ -16,7 +16,7 @@ def project(x, X):
     return x
 
 
-# @jit(nopython=True)
+#@jit(nopython=True)
 def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btmax, fin_diff, fd_type, h):
     
     ''' Function that performs the steepest descent optimization method for a given function.
@@ -86,6 +86,7 @@ def projected_gradient_bcktrck(x0, box, gamma, kmax, tolgrad, tolx, c1, rho, btm
         x_seq = np.append(x_seq, xk.reshape(1, -1), axis=0)
         f_seq = np.append(f_seq, np.array([[fk]]))
         gradf_norm_seq = np.append(gradf_norm_seq, np.array([[gradfk_norm]]))
+        print(k)
         if k == 0:
             bt_seq[0] = bt
         else:
