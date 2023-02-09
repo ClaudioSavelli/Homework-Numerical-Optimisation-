@@ -1,0 +1,36 @@
+exact derivatives time:
+
+--- 0.16175508499145508 seconds ---
+1) d = 3, fin_diff = False, X = X1
+k = 2500, fk = 1.2323223993867778, gradfk_norm = 6.167356319905309, deltaxk_norm = 0.0011209457123699067
+
+--- 1.191246747970581 seconds ---
+2) d = 4, fin_diff = False, X = X1
+k = 2500, fk = 12.567267477520394, gradfk_norm = 77.18817005928179, deltaxk_norm = 0.020246714783899337
+
+--- 36.19477343559265 seconds ---
+3) d = 5, fin_diff = False, X = X1
+k = 2500, fk = 2464.845454960328, gradfk_norm = 1059.498047866199, deltaxk_norm = 0.3178049354295652
+
+
+finite difference time: 
+
+--- 2.034463405609131 seconds ---
+2) d = 3, fin_diff = True, type = fw, k = 2, X = X1
+k = 34, fk = 4.63703046986434e-310, gradfk_norm = 0.0, deltaxk_norm = 0.0
+
+--- 209.81981658935547 seconds ---
+3) d = 5, fin_diff = True, type = fw, k = 2, X = X1
+k = 3, fk = nan, gradfk_norm = nan, deltaxk_norm = 1.9249488112935645e-163
+
+--- 444.0632643699646 seconds ---
+2) d = 4, fin_diff = True, type = fw, k = 4, X = X1
+k = 1355, fk = 4.6370302599817e-310, gradfk_norm = 2e-323, deltaxk_norm = nan
+
+--- 805.5227925777435 seconds ---
+3) d = 4, fin_diff = True, type = fw, k = 4, X = X3
+k = 2500, fk = 5131.264722290431, gradfk_norm = 1101.2624237544192, deltaxk_norm = 9.932129453093572e-08
+
+--- 811.3517408370972 seconds ---
+1) d = 4, fin_diff = True, type = fw, p = 6, X = X1
+k = 2500, fk = 2.2098350527183244, gradfk_norm = 31.60910186276765, deltaxk_norm = 0.0028987493437277164
