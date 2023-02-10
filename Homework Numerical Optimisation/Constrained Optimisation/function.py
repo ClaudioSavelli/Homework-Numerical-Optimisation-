@@ -18,13 +18,17 @@ def rosenbrock(x):
 @jit(nopython=True)
 def grad_rosenbrock(x, fin_diff, type, h):
     '''
-    Compute the appoximation of the gradient via finite differences or, when known, with the true gradient
+    Compute the appoximation of the gradient via finite differences or with the true gradient
     
     INPUTS:
-    x = n−dimensional column vector;
-    type = "centered" (Centered difference approximation for gradf), "forward" (Forward difference approximation for gradf), "backward" (Backward difference approximation for gradf);
+    x = array of x-coordinates;
+    fin_diff = choose between using the finite differences method for the evaluation of the gradient or not;
+    type = if fin_diff == True, choose between centered/forward/backword finite differences method;
+    h = the value of h previously evaluated to use in the evaluation of the gradient for finite difference method;
+
     OUTPUTS:
-    gradfx=the appossimation of the gradient in x via finite differences'''
+    gradfx=the appossimation of the gradient in x;
+    '''
     num = x.shape[0]
     grad = np.empty(num)
     if fin_diff == True:
